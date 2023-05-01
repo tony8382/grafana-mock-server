@@ -1,6 +1,6 @@
-import { join } from 'path';
-import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
+import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
+import { join } from 'path';
 
 export type AppOptions = {
   // Place your custom options for app below here.
@@ -12,11 +12,19 @@ const options: AppOptions = {
 }
 
 const app: FastifyPluginAsync<AppOptions> = async (
-    fastify,
-    opts
+  fastify,
+  opts
 ): Promise<void> => {
   // Place here your custom code!
 
+  fastify.addHook('preHandler', (request, reply, done) => {
+    reply.headers({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST",
+      "Access-Control-Allow-Headers": "accept, content-type"
+    })
+    done()
+  })
   // Do not touch the following lines
 
   // This loads all plugins defined in plugins
@@ -37,4 +45,5 @@ const app: FastifyPluginAsync<AppOptions> = async (
 };
 
 export default app;
-export { app, options }
+export { app, options };
+
